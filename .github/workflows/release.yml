@@ -4,6 +4,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write # Needed to write to GitHub draft release
+
 env:
   NORTHSTAR_VERSION: ${{ github.ref_name }}
 
