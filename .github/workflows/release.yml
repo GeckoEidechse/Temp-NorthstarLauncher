@@ -45,6 +45,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/') && !contains(github.ref, '-rc')
         with:
+          body: ":warning: These are development files! If you want to download Northstar, [go here instead](https://github.com/R2Northstar/Northstar/releases) :warning:"
           draft: false
           files: |
             x64/Release/*
