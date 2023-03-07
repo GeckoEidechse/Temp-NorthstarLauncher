@@ -45,6 +45,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/') && !contains(github.ref, '-rc')
         with:
-          draft: true
+          draft: false
           files: |
             x64/Release/*
