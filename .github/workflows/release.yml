@@ -37,4 +37,4 @@ jobs:
         with:
           name: launcher-debug-files
           path: |
-            northstar-launcher/x64/Release/*.pdb
+            x64/Release/*.pdb
