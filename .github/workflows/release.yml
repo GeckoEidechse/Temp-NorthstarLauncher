@@ -1,0 +1,41 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  NORTHSTAR_VERSION: ${{ github.ref_name }}
+
+jobs:
+  build-launcher:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+      - name: Setup resource file version
+        shell: bash
+        working-directory: northstar-launcher
+        run: |
+          sed -i 's/DEV/${{ env.NORTHSTAR_VERSION }}/g' NorthstarLauncher/resources.rc
+          FILEVERSION=$(echo ${{ env.NORTHSTAR_VERSION }} | tr '.' ',' | sed -E 's/-rc[0-9]+//' | tr -d '[:alpha:]')
+          sed -i "s/0,0,0,1/${FILEVERSION}/g" NorthstarDLL/ns_version.h
+      - name: Build
+        run: |
+          msbuild /p:Configuration=Release R2Northstar.sln
+      - name: Upload launcher build as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: northstar-launcher
+          path: |
+            x64/Release/*.dll
+            x64/Release/*.exe
+            x64/Release/*.txt
+      - name: Upload debug build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: launcher-debug-files
+          path: |
+            northstar-launcher/x64/Release/*.pdb
