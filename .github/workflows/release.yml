@@ -73,5 +73,6 @@ jobs:
         with:
           body: ":warning: These are development files! If you want to download Northstar, [go here instead](https://github.com/R2Northstar/Northstar/releases) :warning:"
           draft: false
-          files: northstar-launcher.zip
-          files: northstar-debug-files.zip
+          files: |
+            northstar-launcher.zip
+            northstar-debug-files.zip
