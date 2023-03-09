@@ -1,8 +1,14 @@
-name: Release
+name: Build
 on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      job:
+        description: 'Job to run'
+        required: true
+        default: 'build-thunderstore-package'
 
 permissions:
   contents: write # Needed to write to GitHub draft release
@@ -41,9 +47,20 @@ jobs:
           name: launcher-debug-files
           path: |
             x64/Release/*.pdb
+
+  upload-launcher-to-release:
+    needs: build-launcher
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Download compiled launcher
+        uses: actions/download-artifact@v2
+        with:
+          name: northstar-launcher
+          path: northstar-launcher
       - name: Create zip to upload
         run: |
-          cd x64/Release/
+          ls -alh
+          cd northstar-launcher/
           zip --recurse-paths --quiet northstar-launcher.zip .
       - name: Upload files to release
         uses: softprops/action-gh-release@v1
@@ -51,5 +68,4 @@ jobs:
         with:
           body: ":warning: These are development files! If you want to download Northstar, [go here instead](https://github.com/R2Northstar/Northstar/releases) :warning:"
           draft: false
-          files: |
-            x64/Release/northstar-launcher.zip
+          files: northstar-launcher/northstar-launcher.zip
