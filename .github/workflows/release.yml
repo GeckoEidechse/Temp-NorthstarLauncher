@@ -41,7 +41,7 @@ jobs:
           name: launcher-debug-files
           path: |
             x64/Release/*.pdb
-      - name: Upload files to release draft
+      - name: Upload files to release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/') && !contains(github.ref, '-rc')
         with:
